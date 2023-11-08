@@ -12,12 +12,12 @@
 #### 2. go to the project folder
 
 
-#### 3. run this command, to install the dependencies
+#### 3. run this command to install the dependencies
 ```sh
 npm install
 ```
 
-#### 4. after the install, run this ither command
+#### 4. after the install, run this command
 ```sh
 npm start
 ```
