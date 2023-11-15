@@ -11,10 +11,10 @@ router.get('/', (req, res) => {
 
 router.get('/search', async (req, res) => {
   try {
-    const { keyword } = req.query;
+    const { keyword, page } = req.query;
 
     // this part I needed separete
-    const result = await searchAmazon(keyword);
+    const result = await searchAmazon(keyword, page);
 
     return res.json(result);
   } catch (error) {

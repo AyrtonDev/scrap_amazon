@@ -1,21 +1,44 @@
 /* eslint-disable import/extensions */
-import cardComponent from './card.js';
 import loaderComponent from './loader.js';
+import cardComponent from './card.js';
 
 const button = document.getElementById('search-button');
-const input = document.getElementById('search-input');
+const search = document.getElementById('search-input');
+const current = document.querySelector('span.pagination-current');
+const next = document.querySelector('button.pagination-next');
+const prev = document.querySelector('button.pagination-prev');
 
-button.addEventListener('click', async () => {
+async function navegation(term, page) {
   // this is a loader component
+  window.scrollTo({ top: 0, auto: 'smooth' });
   loaderComponent(true);
 
   // this makes the request to the backend
-  const response = await fetch(`http://localhost:3000/search?keyword=${input.value}`);
+  const response = await fetch(`http://localhost:3000/search?keyword=${term}&page=${page}`);
 
   const data = await response.json();
 
   // method for make my component
-  cardComponent(data);
+  cardComponent(data, page);
 
   setTimeout(() => loaderComponent(false), 1000);
+}
+
+// Here I control the pagination and events
+
+let pageNumber = Number(current.textContent);
+
+button.addEventListener('click', async () => {
+  pageNumber = 1;
+  navegation(search.value, pageNumber);
+});
+
+prev.addEventListener('click', () => {
+  pageNumber -= 1;
+  navegation(search.value, pageNumber);
+});
+
+next.addEventListener('click', () => {
+  pageNumber += 1;
+  navegation(search.value, pageNumber);
 });

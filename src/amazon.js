@@ -4,14 +4,16 @@ const { filterPrice, limitTitle } = require('./utils');
 
 // Here is a the magic happens
 
-async function searchAmazon(query) {
+async function searchAmazon(query, page) {
   try {
     // Axios makes the request to Amazon and passes the query
     // These headers are necessary to make this request
     // without them returning an error request with http status 503
+
     const response = await axios.get('https://www.amazon.com/s', {
       params: {
         'field-keywords': query,
+        page,
       },
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
@@ -25,7 +27,14 @@ async function searchAmazon(query) {
     // load the response to cheerio
 
     const data = cheerio.load(response.data);
-    const list = [];
+    const obj = {
+      products: [],
+      pagination: {
+        next: true,
+        current: '',
+        prev: true,
+      },
+    };
 
     // get the info from the response
 
@@ -48,13 +57,29 @@ async function searchAmazon(query) {
         const newRating = rating.split('')[0];
 
         // build the list for response
-        list.push({
+        obj.products.push({
           title: newTitle, rating: newRating, price, urlImg, urlProduct,
         });
       }
     });
 
-    return list;
+    data('.s-pagination-container').each((index, element) => {
+      const prevPage = data(element).find('.s-pagination-previous').attr('href');
+      const currentPage = data(element).find('.s-pagination-selected').text();
+      const nextPage = data(element).find('.s-pagination-next').attr('href');
+
+      if (prevPage !== undefined) {
+        obj.pagination.prev = false;
+      }
+
+      obj.pagination.current = currentPage;
+
+      if (nextPage !== undefined && currentPage < 5) {
+        obj.pagination.next = false;
+      }
+    });
+
+    return obj;
   } catch (error) {
     // tratament basic for no break the server
     if (error.response.status === 503) {
@@ -63,7 +88,10 @@ async function searchAmazon(query) {
     }
 
     console.error('Some wrong with server');
-    return [];
+    return {
+      products: [],
+      pagination: null,
+    };
   }
 }
 

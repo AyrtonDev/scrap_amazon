@@ -25,6 +25,14 @@ main {
     width: 100%;
 }
 
+.no-scroll {
+  overflow: hidden !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
 .overlay {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.823);
@@ -128,12 +136,12 @@ button.search-button i {
     width: 100%;
 }
 
-.result-area a {
+.result-area>a {
     display: flex;
     justify-content: flex-start;
     max-width: 700px;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     text-decoration: none;
 }
 
@@ -180,6 +188,52 @@ button.search-button i {
     font-weight: 500;
     font-size: 22px;
     color: var(--a-black)
+}
+
+.pagination-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.pagination-container * {
+  padding: 12px;
+  color: var(--a-black);
+  background-color: #fff;
+  transition: background-color 0.2s ease-in;
+}
+
+.pagination-container button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.pagination-container button:active {
+  background-color: #ddd;
+}
+
+.pagination-prev {
+  border-bottom: 1px solid #aaa;
+  border-top: 1px solid #aaa;
+  border-left: 1px solid #aaa;
+  border-right: none;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.pagination-current {
+  border: 1px solid #aaa;
+}
+
+.pagination-next {
+  border-bottom: 1px solid #aaa;
+  border-top: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  border-left: none;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 @media (max-width: 700px) {
