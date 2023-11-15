@@ -1,12 +1,18 @@
-// eslint-disable-next-line import/extensions
+/* eslint-disable import/extensions */
 import cardInfoComponent from './cardInfo.js';
 
-export default function cardComponent(data) {
+const pagination = document.querySelector('div.pagination-container');
+const current = document.querySelector('span.pagination-current');
+const next = document.querySelector('button.pagination-next');
+const prev = document.querySelector('button.pagination-prev');
+
+export default function cardComponent(data, page) {
   const container = document.querySelector('div.result-area');
   container.innerHTML = '';
 
   // this happens when there's no results
-  if (data.length === 0) {
+  if (data.products.length === 0) {
+    pagination.classList.add('hidden');
     container.innerHTML = `<h2 class="not-found">Not found any results!</h2>
     <h2>Change the search or be more specific</h2>
     `;
@@ -14,7 +20,7 @@ export default function cardComponent(data) {
   }
 
   // here I build my component
-  data.forEach((item) => {
+  data.products.forEach((item) => {
     // link to take to the amazon
     const link = document.createElement('a');
     // card element
@@ -41,4 +47,10 @@ export default function cardComponent(data) {
 
     container.appendChild(link);
   });
+
+  // here I set my pagination html
+  pagination.classList.remove('hidden');
+  prev.disabled = data.pagination.prev;
+  current.innerHTML = page;
+  next.disabled = data.pagination.next;
 }
