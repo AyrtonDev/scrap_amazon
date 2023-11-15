@@ -1,4 +1,5 @@
 export default function loaderComponent(isActive) {
+  const body = document.querySelector('body');
   const main = document.querySelector('main');
 
   if (isActive) {
@@ -9,7 +10,9 @@ export default function loaderComponent(isActive) {
     overlay.appendChild(spin);
     overlay.classList.add('overlay');
     main.appendChild(overlay);
+    body.classList.add('no-scroll');
   } else {
     main.removeChild(main.lastChild);
+    body.classList.remove('no-scroll');
   }
 }
